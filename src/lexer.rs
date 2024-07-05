@@ -1,3 +1,6 @@
+use crate::ast::{
+    AdditiveOperator, ComparisonOperator, MultiplicativeOperator, Operator as AstOperator,
+};
 use std::fmt::{self, Display, Formatter};
 use std::str::FromStr;
 
@@ -227,6 +230,66 @@ impl TokenKind {
     }
 }
 
+impl TryInto<AstOperator> for TokenKind {
+    type Error = ();
+
+    fn try_into(self) -> Result<AstOperator, Self::Error> {
+        match self {
+            TokenKind::Operator(op) => Ok(op.try_into()?),
+            _ => Err(()),
+        }
+    }
+}
+
+impl TryInto<ComparisonOperator> for TokenKind {
+    type Error = ();
+
+    fn try_into(self) -> Result<ComparisonOperator, Self::Error> {
+        match self {
+            TokenKind::Operator(op) => match op {
+                Operator::Equal => Ok(ComparisonOperator::Equal),
+                Operator::NotEqual => Ok(ComparisonOperator::NotEqual),
+                Operator::Greater => Ok(ComparisonOperator::Greater),
+                Operator::GreaterEqual => Ok(ComparisonOperator::GreaterEqual),
+                Operator::Less => Ok(ComparisonOperator::Less),
+                Operator::LessEqual => Ok(ComparisonOperator::LessEqual),
+                _ => Err(()),
+            },
+            _ => Err(()),
+        }
+    }
+}
+
+impl TryInto<AdditiveOperator> for TokenKind {
+    type Error = ();
+
+    fn try_into(self) -> Result<AdditiveOperator, Self::Error> {
+        match self {
+            TokenKind::Operator(op) => match op {
+                Operator::Plus => Ok(AdditiveOperator::Plus),
+                Operator::Minus => Ok(AdditiveOperator::Minus),
+                _ => Err(()),
+            },
+            _ => Err(()),
+        }
+    }
+}
+
+impl TryInto<MultiplicativeOperator> for TokenKind {
+    type Error = ();
+
+    fn try_into(self) -> Result<MultiplicativeOperator, Self::Error> {
+        match self {
+            TokenKind::Operator(op) => match op {
+                Operator::Multiply => Ok(MultiplicativeOperator::Multiply),
+                Operator::Divide => Ok(MultiplicativeOperator::Divide),
+                _ => Err(()),
+            },
+            _ => Err(()),
+        }
+    }
+}
+
 impl FromStr for TokenKind {
     type Err = LexerError;
 
@@ -343,6 +406,26 @@ impl Operator {
             Self::LessEqual,
         ];
         comparators.contains(self)
+    }
+}
+
+impl TryInto<AstOperator> for Operator {
+    type Error = ();
+
+    fn try_into(self) -> Result<AstOperator, Self::Error> {
+        match self {
+            Operator::Plus => Ok(AdditiveOperator::Plus.into()),
+            Operator::Minus => Ok(AdditiveOperator::Minus.into()),
+            Operator::Multiply => Ok(MultiplicativeOperator::Multiply.into()),
+            Operator::Divide => Ok(MultiplicativeOperator::Divide.into()),
+            Operator::Equal => Ok(ComparisonOperator::Equal.into()),
+            Operator::NotEqual => Ok(ComparisonOperator::NotEqual.into()),
+            Operator::Greater => Ok(ComparisonOperator::Greater.into()),
+            Operator::GreaterEqual => Ok(ComparisonOperator::GreaterEqual.into()),
+            Operator::Less => Ok(ComparisonOperator::Less.into()),
+            Operator::LessEqual => Ok(ComparisonOperator::LessEqual.into()),
+            _ => Err(()),
+        }
     }
 }
 

@@ -31,9 +31,12 @@ fn main() {
     }
 
     let mut parser = Parser::new(lexer, &mut emitter);
-    if let Err(e) = parser.program() {
-        eprintln!("Encountered an error parsing the source code. \n\n {}", e);
-        return;
+    match parser.program() {
+        Ok(p) => println!("Parsed program: {:#?}", p),
+        Err(e) => {
+            eprintln!("Encountered an error parsing the source code. \n\n {}", e);
+            return;
+        }
     }
 
     emitter.print();
