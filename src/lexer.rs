@@ -87,7 +87,7 @@ impl Lexer {
     /// If not, return the first error encountered in lexing.
     /// If successful, reset the lexer to the beginning of the source.
     pub fn validate(&mut self) -> Result<(), LexerError> {
-        let x = self.get_all_tokens()?;
+        let _ = self.get_all_tokens()?;
         self.curr_char = self.source.chars().nth(0).unwrap();
         self.curr_pos = 0;
         Ok(())
@@ -168,7 +168,6 @@ impl Lexer {
 #[derive(Debug)]
 pub enum LexerError {
     UnexpectedChar(char),
-    UnexpectedEOF,
     KindParseError,
 }
 
@@ -176,7 +175,6 @@ impl Display for LexerError {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match self {
             LexerError::UnexpectedChar(c) => write!(f, "Unexpected character: {}", c),
-            LexerError::UnexpectedEOF => write!(f, "Unexpected EOF"),
             LexerError::KindParseError => write!(f, "Failed to parse token kind"),
         }
     }
