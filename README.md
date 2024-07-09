@@ -33,30 +33,32 @@ Compiler for a BASIC-like language, inspired by the [teeny-tiny-compiler](https:
 
 ### Running the application
 
-1. Clone the repository
+1. Clone the repository  
     HTTPS:
     ```bash
-    $ git clone https://github.com/BraSDon/basic-compiler.git
+    git clone https://github.com/BraSDon/basic-compiler.git
     ```
 
     SSH:
     ```bash
-    $ git clone git@github.com:BraSDon/basic-compiler.git
+    git clone git@github.com:BraSDon/basic-compiler.git
     ```
 2. Change into project directory
     ```bash
-    $ cd basic-compiler
+    cd basic-compiler
     ```
 3. Build the project
     ```bash
-    $ cargo build --release
+    cargo build --release
     ```
 4. Compile and run one of the example programs; or create your own in examples/
     ```bash
-    $ sh compile.sh parse-if
+    sh compile.sh parse-if
     ```
 
 ## Language Grammar
+
+```
 program ::= {statement}  
 statement ::= "PRINT" (expression | string) nl  
     | "IF" comparison "THEN" nl {statement} "ENDIF" nl  
@@ -71,3 +73,4 @@ term ::= unary {( "/" | "*" ) unary}
 unary ::= ["+" | "-"] primary    
 primary ::= number | ident    
 nl ::= '\n'+    
+```
