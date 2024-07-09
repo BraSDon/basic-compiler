@@ -36,8 +36,4 @@ impl Emitter {
         file.write_all(self.code.as_bytes())?;
         Ok(())
     }
-
-    pub fn print(&self) {
-        println!("{}{}", self.header, self.code)
-    }
 }
